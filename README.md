@@ -16,7 +16,7 @@ The stop words list used in this repository (`bulgarian.stop`) is a modified ver
 
 ## How to install
 
-1. Copy the three files `bulgarian.affix`, `bulgarian.dict` and `bulgarian.stop` to your `$SHAREDIR/tsearch_data/` directory.
+1. Copy the three files `bulgarian.affix`, `bulgarian.dict` and `bulgarian.stop` to your `$SHAREDIR/tsearch_data/` directory (eg. `C:\Program Files\PostgreSQL\12\share\tsearch_data`). You can determine what your `$SHAREDIR` is by running `pg_config --sharedir`.
 
 2. Execute the following SQL script:
 
@@ -31,13 +31,14 @@ The stop words list used in this repository (`bulgarian.stop`) is a modified ver
            TEMPLATE = pg_catalog.simple,
            STOPWORDS = bulgarian
        );
-       ALTER TEXT SEARCH CONFIGURATION bulgarian ADD MAPPING FOR asciiword, asciihword, hword, hword_part, word WITH bulgarian_ispell, bulgarian_simple;
+       ALTER TEXT SEARCH CONFIGURATION bulgarian ALTER MAPPING FOR asciiword, asciihword, hword, hword_part, word WITH bulgarian_ispell, bulgarian_simple;
 
 3. Make sure its working by running a full text search query.
-   A query like this one
+
+   A query like this one:
 
        SELECT to_tsvector('bulgarian', 'текстовете');
               
-   should output the base of the word `текстовете`
+   should output only the base of the word (`текст`):
    
        `"'текст':1"`
